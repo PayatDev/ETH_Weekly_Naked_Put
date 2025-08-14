@@ -233,6 +233,8 @@ if __name__ == "__main__":
     print("LLM RECO:", json.dumps(reco, ensure_ascii=False, indent=2))
 
     # 3) ส่ง Telegram
+    BOT_TOKEN = os.environ.get("BOT_TOKEN")
+    CHAT_ID = os.environ.get("CHAT_ID")
     report = format_report_th(data, reco)
     sent = send_telegram_message(BOT_TOKEN, CHAT_ID, report)
     print("Telegram:", "✅ sent" if sent else "❌ failed")
