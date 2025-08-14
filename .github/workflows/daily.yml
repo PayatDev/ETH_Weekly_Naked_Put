@@ -1,0 +1,53 @@
+name: ETH Weekly Put Bot (Daily 06:00 TH)
+
+on:
+  schedule:
+    # 06:00 Asia/Bangkok = 23:00 UTC ของวันก่อนหน้า (ไทย UTC+7, ไม่มี DST)
+    - cron: "0 23 * * *"
+  workflow_dispatch: {}  # กดรันเองได้ด้วย
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: eth-bot-daily
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run bot
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          BOT_TOKEN:       ${{ secrets.BOT_TOKEN }}
+          CHAT_ID:         ${{ secrets.CHAT_ID }}
+          # (ถ้าคุณมีคีย์อื่น ๆ ที่สคริปต์อ่านจาก ENV ก็ใส่เพิ่มได้ เช่น)
+          # DERIVE_OWNER_WALLET:   ${{ secrets.DERIVE_OWNER_WALLET }}
+          # DERIVE_SESSION_PRIVKEY:${{ secrets.DERIVE_SESSION_PRIVKEY }}
+        run: |
+          python weekly_put_reco.py
+
+      - name: Archive log (optional)
+        if: ${{ always() }}
+        run: |
+          mkdir -p logs && echo "Run at $(date -u)" > logs/gha_run.txt
+        # ถ้าอยากโหลดไฟล์ log ออกมาเป็น artifact
+      - name: Upload logs (optional)
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: run-logs
+          path: logs/
