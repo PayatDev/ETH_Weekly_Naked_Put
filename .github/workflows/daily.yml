@@ -28,8 +28,10 @@ jobs:
       - name: Sanity check env
         run: |
           test -n "$OPENAI_API_KEY" || (echo "OPENAI_API_KEY missing" && exit 1)
+          echo "::add-mask::$OPENAI_API_KEY"
+          echo "OPENAI_API_KEY len = ${#OPENAI_API_KEY}"
           test -n "$BOT_TOKEN" || (echo "BOT_TOKEN missing" && exit 1)
-          test -n "$CHAT_ID" || (echo "CHAT_ID missing" && exit 1)
+          test -n "$CHAT_ID"   || (echo "CHAT_ID missing" && exit 1)
           echo "All env present."
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
