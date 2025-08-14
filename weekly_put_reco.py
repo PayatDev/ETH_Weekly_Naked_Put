@@ -236,10 +236,10 @@ if __name__ == "__main__":
         {k:data[k] for k in ["current_price","rsi_14","sma_20","volatility_10d","fear_greed"]},
         ensure_ascii=False, indent=2
     ))
-    reco = run_llm_recommendation(data, max_days=90, step=1)  # step=2/3 เพื่อลด token ได้
-    print("LLM RECO:", json.dumps(reco, ensure_ascii=False, indent=2))
+    #reco = run_llm_recommendation(data, max_days=90, step=1)  # step=2/3 เพื่อลด token ได้
+    #print("LLM RECO:", json.dumps(reco, ensure_ascii=False, indent=2))
 
     # 3) ส่ง Telegram
-    report = format_report_th(data, reco)
-    sent = send_telegram_message(BOT_TOKEN, CHAT_ID, report)
-    print("Telegram:", "✅ sent" if sent else "❌ failed")
+    #report = format_report_th(data, reco)
+    #sent = send_telegram_message(BOT_TOKEN, CHAT_ID, report)
+    #print("Telegram:", "✅ sent" if sent else "❌ failed")
