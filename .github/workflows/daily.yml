@@ -2,7 +2,8 @@ name: ETH Weekly Put Bot (Daily 06:00 TH)
 
 on:
   schedule:
-    - cron: "0 23 * * *"  # 23:00 UTC = 06:00 Asia/Bangkok
+    - cron: "0 23 * * *"   # 06:00 TH = 23:00 UTC ของวันก่อนหน้า
+  workflow_dispatch:
 
 jobs:
   run:
